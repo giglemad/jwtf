@@ -9,10 +9,11 @@ module JWTF
     end
 
     def call(params = {})
-      payload = config.payload.call(params)
-      algo = config.algorithm
-      secret = config.secret
-      ::JWT.encode(payload, secret, algo)
+      ::JWT.encode(payload.call(params), secret, algorithm)
     end
+
+    private
+    extend Forwardable
+    def_delegators :@config, :payload, :algorithm, :secret
   end
 end
